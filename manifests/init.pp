@@ -40,5 +40,6 @@ class rtorrent(
 ) {
 
   class {'rtorrent::package': ensure => $ensure}
-  class {'rtorrent::config': ensure => $ensure}
+  class {'rtorrent::config': ensure => $ensure} ~>
+  class {'rtorrent::service': ensure => $ensure}
 }

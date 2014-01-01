@@ -12,6 +12,12 @@ class rtorrent::config(
     home   => $homedir,
   }
 
+  file {'/etc/init.d/rtorrentd':
+    ensure  => $ensure,
+    mode    => '0755',
+    content => template('rtorrent/rtorrentd-init.erb'),
+  }
+
   $ensure_dir = $ensure ? {
     'present' => directory,
     default   => absent,

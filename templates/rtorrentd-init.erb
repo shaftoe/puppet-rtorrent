@@ -1,0 +1,59 @@
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides:          rtorrent
+# Required-Start:    $network
+# Required-Stop:     $network
+# Should-Start:      rtorrent
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+### END INIT INFO
+
+. /lib/lsb/init-functions
+LIBDIR=<%= @homedir %>
+
+start_rtorrent () {
+    cd $LIBDIR
+    su -c 'dtach -n /tmp/rtorrent rtorrent' rtorrent
+}
+
+stop_rtorrent() {
+    pkill -x rtorrent > /dev/null
+}
+
+status_rtorrent() {
+    PID=$(pgrep -x rtorrent)
+    if [ -n "$PID" ]; then
+        log_success_msg "rtorrent is running with PID ${PID}"
+        return 0
+    else
+        log_failure_msg "rtorrent status "
+        return 1
+    fi
+}
+
+case "$1" in
+    start)
+        log_begin_msg "Starting rtorrent"
+        start_rtorrent
+        log_end_msg $?
+    ;;
+    stop)
+        log_begin_msg "Stopping rtorrent"
+        stop_rtorrent
+        log_end_msg $?
+    ;;
+    status)
+        status_rtorrent
+    ;;
+    restart|force-reload)
+        log_begin_msg "Restarting rtorrent"
+        stop_rtorrent
+        sleep 5
+        start_rtorrent
+        log_end_msg $?
+    ;;
+    *)
+        echo "Usage: $0 {start|stop|status|restart|force-reload}" >&2
+        exit 1
+    ;;
+esac
