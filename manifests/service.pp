@@ -5,7 +5,9 @@ class rtorrent::service($ensure = present) {
 
   if $ensure == present {
     service{'rtorrentd':
-      ensure => running,
+      ensure     => running,
+      hasrestart => true,
+      hasstatus  => true,
     }
   }
 

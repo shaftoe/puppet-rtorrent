@@ -27,13 +27,15 @@ class rtorrent::config(
     ensure  => $ensure_dir,
     force   => true,
     owner   => 'rtorrent',
-    mode    => '0700',
+    group   => $gid,
+    mode    => '0750',
     require => User['rtorrent'],
   }
 
   file {"${homedir}/.rtorrent.rc":
     ensure  => $ensure,
     force   => true,
+    mode    => '0400',
     owner   => 'rtorrent',
     content => "directory = ${homedir}/downloads
 load_start_verbose = ${homedir}/*.torrent
